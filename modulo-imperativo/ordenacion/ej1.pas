@@ -19,12 +19,12 @@ const
      dimF = 300;
 
 type
-    expensas = record
+    oficina = record
              cod: integer;
              dni: integer;
              valor: real;
              end;
-    vOficinas = array [1..dimF] of expensas;
+    vOficinas = array [1..dimF] of oficina;
 
 
 
@@ -33,7 +33,7 @@ type
 {***************************************************}
 
 // lectura de registro
-procedure leerDato (var dato: expensas);
+procedure leerDato (var dato: oficina);
 begin
      writeln ('Ingrese código de oficina:');
      readln (dato.cod);
@@ -45,9 +45,9 @@ begin
      end;
 end;
 
-procedure cargar (var v: vOficinas; var dimL: integer);
+procedure cargarVector (var v: vOficinas; var dimL: integer);
 var
-   dato: expensas;
+   dato: oficina;
 begin
      dimL:= 0;
      leerDato (dato);
@@ -67,12 +67,12 @@ end;
 procedure ordInsercion (var v: vOficinas; dimL: integer);
 var
    i, j: integer;
-   dato: expensas;
+   dato: oficina;
 begin
      for i:= 2 to dimL do begin
          dato:= v[i];
          j:= i - 1;
-         while (j > 0) and (v[j] > dato) do begin
+         while (j > 0) and (v[j].cod > dato.cod) do begin
                v[j+1]:= v[j];
                j:= j - 1;
          end;
@@ -89,12 +89,12 @@ end;
 procedure ordSeleccion (var v: vOficinas; dimL: integer);
 var
    i, j, p: integer;
-   dato: expensas;
+   dato: oficina;
 begin
      for i:= 1 to dimL-1 do begin
          p:= i;
          for j:= i+1 to dimL do
-             if (v[j] < v[p]) then p:= j;
+             if (v[j].cod < v[p].cod) then p:= j;
          dato:= v[p];
          v[p]:= v[i];
          v[i]:= dato;
@@ -123,9 +123,8 @@ var
    dimL: integer;
 
 begin
-     cargar (oficinas, dimL);
+     cargarVector (oficinas, dimL);
      ordSeleccion (oficinas, dimL);
-     imprimir (oficinas, dimL);
      writeln('***********************************************');
      readln;
 end.
