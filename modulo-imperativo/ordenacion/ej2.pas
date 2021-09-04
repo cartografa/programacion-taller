@@ -34,7 +34,7 @@ type
     lista = ^nodo;
     nodo = record
            dato: peli;
-           sig: ^lista;
+           sig: lista;
            end;
 
     peliculas = array [subrango] of lista;
