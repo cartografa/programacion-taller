@@ -21,6 +21,7 @@ type
            HD: arbol;
            end;
 
+
 {*******************************************}
 {             (1) Cargar ABB                }
 {*******************************************}
@@ -40,6 +41,7 @@ begin
             crear (a^.HD, n);
 end;
 
+
 {*******************************************}
 {            (2) Imprimir ABB               }
 {*******************************************}
@@ -52,6 +54,7 @@ begin
         imprimirEnOrden(a^.HD);
      end;
 end;
+
 
 {*******************************************}
 {     (3) Multiplicar por 2 cada elemento   }
@@ -74,6 +77,7 @@ begin
 		else
 			maximoElemento:= maximoElemento(a^.HD);
 end;
+
 
 {*******************************************}
 {            PROGRAMA PRINCIPAL             }

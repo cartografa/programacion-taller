@@ -6,15 +6,20 @@ se debe imprimir 2  5  6.
 
 program teoria2ej2;
 
-procedure imprimirDigitos (n: integer);
+procedure imprimirDigitos (num: integer);
 var
-   copia: integer;
+   dig: integer;
 begin
-     copia:= n;
-     if (n <> 0) then begin
+     if (num <> 0) then begin
+        dig:= num MOD 10;
+        num:= num DIV 10;
+        imprimirDigitos (num);
+        writeln (dig);
+     end;
+end;
 
 
-
+{******* PROGRAMA PRINCIPAL ********}
 
 var
    n: integer;
@@ -23,10 +28,11 @@ begin
      write('Ingrese un numero: ');
      readln(n);
      while (n <> 0) do begin
-           imprimirDigitos (n)
+           imprimirDigitos (n);
+           writeln('');
            write('Ingrese un numero: ');
            readln(n);
      end;
-
-
+     write('**** FIN DEL PROGRAMA ****');
+     readln;
 end.
