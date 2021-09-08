@@ -60,7 +60,8 @@ end;
 {     (3) Multiplicar por 2 cada elemento   }
 {*******************************************}
 
-// procedure multiplicar (a: arbol);
+function multiplicar (a: arbol):;
+
 
 
 {*******************************************}
@@ -72,9 +73,7 @@ begin
 	if (a = nil) then
 		  maximoElemento:= nil
 	else
-		if (a^.HD = nil) then
-			maximoElemento:= a
-		else
+
 			maximoElemento:= maximoElemento(a^.HD);
 end;
 
@@ -85,8 +84,7 @@ end;
 
 var
    n: integer;
-   abb: arbol;
-   max: integer;
+   abb, max: arbol;
 
 begin
      abb:= nil;
@@ -100,9 +98,10 @@ begin
      writeln ('');
      imprimirEnOrden (abb);
      writeln ('');
-     // multiplicar (abb);
-     // writeln ('');
-     max:= (maximoElemento(abb))^.dato;
-     writeln ('El elemento maximo del arbol es: ', max);
+     multiplicar (abb);
+     writeln ('');
+     max:= maximoElemento(abb);
+     if (max <> nil) then
+        writeln ('El elemento maximo del arbol es: ', max^.dato);
      readln;
 end.
