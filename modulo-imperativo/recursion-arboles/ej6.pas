@@ -26,12 +26,20 @@ procedure busquedaDicotomica (v: vector; ini, fin: indice; dato: integer; var po
 
 begin
      pos:= (ini + fin) div 2;  // la posicion es el medio del vector
-     while (ini <= fin) and (dato <> v[pos]) do begin
-           if (dato < v[pos]) then fin:= pos - 1  // se queda la primera parte
-                            else ini:= pos + 1; // se queda con la segunda parte
-           pos:= (ini + fin) div 2; // vuelve a calcular el medio del vector
-     end;
-     if (ini > fin) then pos:= -1; // no encontró el dato
+     if (dato = v[pos])
+        then busquedaDicotomica:= pos;
+     else if (ini <= sup) then begin
+          if (a < v[pos]) then fin:= pos -1
+                          else ini:= pos + 1;
+          busquedaDicotomica (v, ini, fin, dato, pos)
+     end
+        else busquedaDicotomica:= -1;
+     //while (ini <= fin) and (dato <> v[pos]) do begin
+     //      if (dato < v[pos]) then fin:= pos - 1  // se queda la primera parte
+     //                       else ini:= pos + 1; // se queda con la segunda parte
+     //      pos:= (ini + fin) div 2; // vuelve a calcular el medio del vector
+     // end;
+     // if (ini > fin) then pos:= -1; // no encontró el dato
 end;
 
 
