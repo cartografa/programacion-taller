@@ -77,7 +77,7 @@ public class Micro {
     
     public boolean estaLibre(int num) {
         if (this.validarAsiento(num)) {
-            return this.asientos[num];
+            return !this.asientos[num];
         } else {
             return false;
         }
@@ -86,17 +86,20 @@ public class Micro {
     public void ocuparAsiento(int num) {
         if (this.validarAsiento(num)) {
             this.asientos[num] = true;
+            this.cantidadOcupada++;
         }
     }
     
     public void liberarAsiento(int num) {
         if (this.validarAsiento(num)) {
             this.asientos[num] = false;
+            this.cantidadOcupada--;
         }
     }
     
     public int primerAsientoLibre() {
-        
+            
+        }
     }
     
 }
