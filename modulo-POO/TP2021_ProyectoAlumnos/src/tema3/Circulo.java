@@ -13,6 +13,18 @@ public class Circulo {
     private String colorRelleno;
     private String colorLinea;
     
+    /*------ CONSTRUCTORES ------*/
+    public Circulo(double radio, String colorRelleno, String colorLinea) {
+        this.radio = radio;
+        this.colorRelleno = colorRelleno;
+        this.colorLinea = colorLinea;
+    }
+    
+    public Circulo() {
+        // contructor nulo
+    }
+    
+    
     /* --------- SETTERS ---------*/
     public void setRadio(double radio) {
         this.radio = radio;

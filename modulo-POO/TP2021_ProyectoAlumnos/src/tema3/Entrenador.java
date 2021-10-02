@@ -15,6 +15,17 @@ public class Entrenador {
     private double sueldoBasico;
     private int campeonatos;
     
+    /*------- CONSTRUCTORES --------*/
+    public Entrenador(String nombre, double sueldoBasico, int campeonatos) {
+        this.nombre = nombre;
+        this.sueldoBasico = sueldoBasico;
+        this.campeonatos = campeonatos;
+    }
+    
+    public Entrenador() {
+        // contructor nulo
+    }
+    
     /* --------- SETTERS ---------*/
     public void setNombre(String nombre) {
         this.nombre = nombre;
