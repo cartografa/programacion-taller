@@ -1,0 +1,93 @@
+{
+    Realice un programa en el que 4 robots limpien de papeles el perímetro de un cuadrado de lado 20 en sentido horario
+
+    El vértice inferior izquierdo del cuadrado se ubica en la esquina (10,10).
+     finalizar, cada robot debe informar la cantidad de papeles juntados en su lado.
+    Al realizar este programa, analizar:
+    ¿Cómo deben declararse la o las áreas?
+    ¿Existe riesgo de colisión?
+}
+
+programa ejercicio2
+
+procesos
+  proceso juntarPapeles(ES papeles: numero)
+  comenzar 
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin
+
+  proceso recorrerLado(ES papeles: numero)
+  comenzar
+    repetir 99
+      juntarPapeles(papeles)
+      mover
+  fin 
+
+
+areas
+  lado1: AreaP(10, 10, 10, 29)
+  lado2: AreaP(10, 30, 29, 30)
+  lado3: AreaP(30, 11, 30, 30) 
+  lado4: AreaP(11, 10, 30, 10)
+
+robots
+  robot tipo1 
+  variables 
+    papeles: numero
+  comenzar
+    papeles:= 0
+    recorrerLado(papeles)
+    Informar(papeles)
+  fin
+
+  robot tipo2 
+  variables 
+    papeles: numero
+  comenzar
+    derecha
+    papeles:= 0
+    recorrerLado(papeles)
+    Informar(papeles)
+  fin
+
+  robot tipo3 
+  variables 
+    papeles: numero
+  comenzar
+    repetir 2
+      derecha
+    papeles:= 0
+    recorrerLado(papeles)
+    Informar(papeles)
+  fin
+
+  robot tipo4
+  variables 
+    papeles: numero
+  comenzar
+    repetir 3
+      derecha
+    papeles:= 0
+    recorrerLado(papeles)
+    Informar(papeles)
+  fin
+
+{*** PROGRAMA PRINCIPAL ***}
+variables
+  r1: tipo1 
+  r2: tipo2
+  r3: tipo3
+  r4: tipo4
+
+comenzar
+  AsignarArea(r1, lado1)
+  AsignarArea(r2, lado2)
+  AsignarArea(r3, lado3)
+  AsignarArea(r4, lado4)
+  Iniciar(r1, 10, 10)
+  Iniciar(r2, 10, 30)
+  Iniciar(r3, 30, 30)
+  Iniciar(r4, 30, 10)
+fin 
