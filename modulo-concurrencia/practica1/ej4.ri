@@ -1,0 +1,108 @@
+{
+    La ciudad se dividió en 4 áreas: 
+        Área 1: desde la avenida 1 hasta la avenida 25
+        Área 2: desde la avenida 26 hasta la avenida 50
+        Área 3: desde la avenida 51 hasta la avenida 75
+        Área 4: desde la avenida 76 hasta la avenida 100
+    Las áreas impares (1 y 3) deben limpiarse de flores, 
+    y las áreas pares (2 y 4) deben limpiarse de papeles.
+    Realice un programa en el que un robot se encarga de 
+    limpiar las áreas 1 y 3, y otro robot se encarga de las 
+    áreas 2 y 4. Para ello, modularice el recorrido de cada
+    área.
+}
+
+programa ej4
+
+procesos
+  proceso juntarPapeles
+  comenzar 
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+  fin
+
+  proceso juntarFlores
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+  fin 
+
+  proceso recorrerAvenidaP
+  comenzar 
+    repetir 99
+      si (HayPapelEnLaEsquina)
+        juntarPapeles
+      mover 
+    si (HayPapelEnLaEsquina)
+      juntarPapeles
+  fin
+
+  proceso recorrerAvenidaF
+  comenzar 
+    repetir 99
+      si (HayFlorEnLaEsquina)
+        juntarFlores
+      mover 
+    si (HayFlorEnLaEsquina)
+      juntarFlores
+  fin
+
+  proceso recorrerAreaP (E avenida: numero)
+  comenzar 
+    recorrerAvenidaP
+    repetir 24
+      avenida:= avenida + 1
+      Pos(avenida, 1)
+      recorrerAvenidaP
+  fin
+
+  proceso recorrerAreaF (E avenida: numero)
+  comenzar 
+    recorrerAvenidaF
+    repetir 24
+      avenida:= avenida + 1
+      Pos(avenida, 1)
+      recorrerAvenidaF
+  fin
+  
+areas
+  area1: AreaP(1, 100, 25, 100)
+  area2: AreaP(26, 100, 50, 100)
+  area3: AreaP(51, 100, 75, 100)
+  area4: AreaP(76, 100, 100, 100)
+
+robots
+  robot juntaPapel
+  variables
+    avenida: numero
+  comenzar
+    avenida:= PosAv
+    recorrerAreaP(avenida)
+    avenida:= avenida + 50
+    recorrerAreaP(avenida)      
+  fin 
+
+  robot juntaFlor
+  variables
+    avenida: numero
+  comenzar
+    avenida:= PosAv
+    recorrerAreaF(avenida)
+    avenida:= avenida + 50
+    recorrerAreaF(avenida)      
+  fin 
+
+
+{PROGRAMA PRINCIPAL}
+variables
+  papelero: juntaPapel
+  florista: juntaFlor   
+
+comenzar
+  AsignarArea(papelero, area2)
+  AsignarArea(papelero, area4)
+  AsignarArea(florista, area1)
+  AsignarArea(florista, area3)
+  Iniciar(papelero, 26, 1)
+  Iniciar(florista, 1, 1)
+fin 

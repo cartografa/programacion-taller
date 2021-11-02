@@ -1,0 +1,85 @@
+{
+  Realice un programa en el que 3 robots realicen escaleras de 4 escalones, en las que el tamaño de cada escalón se incrementa en un 1 respecto al escalón anterior. El primer escalón será de 1x1, el segundo de 2x2, y así sucesivamente.
+    Al finalizar el recorrido, cada robot debe informar la cantidad de escalones en los que la cantidad de papeles superó en 1 a la cantidad de flores. Durante el recorrido, no se debe modificar el contenido de las esquinas.
+
+}
+
+programa ejercicio3
+
+procesos 
+  proceso contarPapeles(ES papeles: numero)
+  variables
+    aux: numero
+  comenzar 
+    aux:= 0
+    mientras(HayPapelEnLaEsquina)
+      tomarPapel
+      aux:= aux + 1
+    repetir aux
+      depositarPapel
+    papeles:= papeles + aux
+  fin
+
+  proceso contarFlores(ES flores: numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0 
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      aux:= aux + 1
+    repetir aux
+      depositarFlor
+    flores:= flores + aux
+  fin
+
+areas
+  area1: AreaC(12, 6, 32, 24)
+
+robots
+  robot tipo1
+  variables 
+    flores: numero
+    papeles: numero 
+    pasos: numero
+    escalonesConMasPapeles: numero
+  comenzar
+    escalonesConMasPapeles:= 0
+    pasos:= 1
+    flores:= 0
+    papeles:= 0
+    contarPapeles(papeles)
+    contarFlores(flores) {cuenta primer esquina}
+    repetir 4
+      repetir pasos {cuenta hacia arriba}
+        mover 
+        contarPapeles(papeles)
+        contarFlores(flores)
+      derecha 
+      repetir pasos {cuenta hacia derecha}
+        mover 
+        contarFlores(flores)
+        contarPapeles(papeles)
+      si (papeles > flores)
+        escalonesConMasPapeles:= escalonesConMasPapeles + 1
+      repetir 3 {queda mirando hacia arriba}
+        derecha
+      pasos:= pasos + 1
+    Informar(escalonesConMasPapeles)
+  fin 
+      
+      
+{PROGRAMA PRINCIPAL}
+variables
+  r1: tipo1
+  r2: tipo1
+  r3: tipo1 
+
+comenzar
+  AsignarArea(r1, area1)
+  AsignarArea(r2, area1)
+  AsignarArea(r3, area1)
+  Iniciar(r1, 12, 14)
+  Iniciar(r2, 17, 10)
+  Iniciar(r3, 22, 6)
+fin
