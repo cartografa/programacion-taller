@@ -1,0 +1,61 @@
+{
+   Realice un programa donde 4 robots colaboren para recoger todas las flores de una esquina indicada por un robot jefe, seleccionada de manera aleatoria dentro del cuadrante (2,2) y (10,10). Para ello el jefe determina inicialmente una esquina y los robots deben accederla, tomar de a una las flores y volver a su posición inicial. Cuando los robots terminan el jefe deberá informar cuál de ellos logró recoger más flores. 
+    Las esquinas de inicio de los robots deberán ser jefe (1,1) y robots (2,1), (3, 1), (4,1) y (5,1).
+}
+
+programa ejercicio3
+procesos
+  proceso enviarID {Asigno el id a cada robot}
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    EnviarMensaje(3, r3)
+    EnviarMensaje(4, r4)
+  fin
+
+  proceso enviarEsquina(E avRandom: numero; E caRandom: numero)
+  comenzar
+    EnviarMensaje(avRandom,r1)
+    EnviarMensaje(caRandom,r1)
+    
+    EnviarMensaje(avRandom,r2)
+    EnviarMensaje(caRandom,r2)
+    
+    EnviarMensaje(avRandom,r3)
+    EnviarMensaje(caRandom,r3)
+    
+    EnviarMensaje(avRandom,r4)
+    EnviarMensaje(caRandom,r4)
+  fin
+  
+{CONTINUAR...}  
+
+areas 
+
+robots
+  robot jefe
+  variables 
+    caRandom: numero 
+    avRandom: numero
+  comenzar 
+    enviarID
+    Random(caRandom, 2, 10)
+    Random(avRandom, 2, 10)
+    enviarEsquina(avRandom, caRandom)
+  fin
+
+  robot participante
+  variables
+    flores: numero
+    avInicial: numero
+    caInicial: numero
+  comenzar
+
+  fin 
+
+{PROGRAMA PRINCIPAL}
+variables
+
+comenzar
+
+fin

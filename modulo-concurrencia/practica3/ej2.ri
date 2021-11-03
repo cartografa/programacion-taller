@@ -1,0 +1,162 @@
+{
+Realice un programa en el cual 2 robots corren una carrera. El recorrido realizado por cada uno es el que se muestra en la siguiente figura. Durante el recorrido el robot 1 debe juntar todas las flores que encuentre en los vértices de cada escalón, mientras que el robot 2 debe juntar todos los papeles que encuentre en los vértices de cada escalón.
+Al finalizar deben informar la cantidad de elementos recogidos.
+El robot 1 debe iniciar su recorrido en la esquina (1,1) y el robot 2 debe iniciar su recorrido en la esquina (31,1). 
+Al finalizar la carrera, un robot jefe (inicializado en la esquina (15,1) ) debe informar qué robot llegó primero a la esquina central de su recorrido.     
+}
+
+programa ejercicio2
+procesos 
+  proceso juntarFlores (ES flores: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin 
+
+  proceso juntarPapeles (ES papeles: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      papeles:= papeles + 1
+  fin 
+
+  proceso izquierda 
+  comenzar 
+    repetir 3
+      derecha
+  fin
+
+  proceso recorrerEscalonF(E medida: numero; ES flores: numero)
+  comenzar
+    juntarFlores(flores)
+    repetir medida 
+      mover
+    juntarFlores(flores)
+    derecha
+    repetir medida 
+      mover 
+    izquierda
+  fin 
+
+  proceso recorrerEscalonP(E medida: numero; ES papeles: numero)
+  comenzar
+    juntarPapeles(papeles)
+    repetir medida 
+      mover
+    juntarPapeles(papeles)
+    izquierda
+    repetir medida 
+      mover 
+    derecha
+  fin 
+
+areas 
+  ciudad: AreaC(1, 1, 31, 32)
+
+robots
+  robot arbitro 
+  variables
+    primero: numero
+    segundo: numero
+    termino1: boolean
+    termino2: boolean
+  comenzar
+    EnviarMensaje(1, r1)
+    EnviarMensaje(2, r2)
+    RecibirMensaje(primero, *)
+    RecibirMensaje(segundo, *)
+    RecibirMensaje(termino1, *)
+    RecibirMensaje(termino2, *)
+    Informar(primero)
+  fin 
+
+  robot florista
+  variables
+    flores: numero 
+    id: numero
+    medida: numero
+  comenzar
+    RecibirMensaje(id, jefe)
+
+    medida:= 5
+
+    mientras (medida >= 2)
+      recorrerEscalonF(medida, flores)
+      medida:= medida - 1
+    
+    {chequeo ultimo escalon}
+    juntarFlores(flores)
+    mover 
+    juntarFlores(flores)
+    derecha 
+    BloquearEsquina(15, 15)
+    mover 
+    EnviarMensaje(id, jefe) {aviso al jefe que llegue al centro}
+    juntarFlores(flores)
+    repetir 2
+      derecha 
+    mover
+    LiberarEsquina(15, 15) 
+
+    medida:= 2
+    mientras (medida <= 5)
+      recorrerEscalonF(medida, flores)
+      medida:= medida + 1
+    
+    EnviarMensaje(V, jefe) {aviso que terminé}
+    Informar(flores)
+  fin 
+
+  robot papelero 
+  variables
+    papeles: numero 
+    id: numero
+    medida: numero
+  comenzar
+    RecibirMensaje(id, jefe)
+
+    medida:= 5
+
+    mientras (medida >= 2)
+      recorrerEscalonP(medida, papeles)
+      medida:= medida - 1
+    
+    {chequeo ultimo escalon}
+    juntarPapeles(papeles)
+    mover 
+    juntarPapeles(papeles)
+    izquierda 
+    BloquearEsquina(15, 15)
+    mover 
+    EnviarMensaje(id, jefe) {aviso al jefe que llegue al centro}
+    juntarPapeles(papeles)
+    repetir 2
+      derecha 
+    mover
+    LiberarEsquina(15, 15) 
+
+    medida:= 2
+    mientras (medida <= 5)
+      recorrerEscalonP(medida, papeles)
+      medida:= medida + 1
+    
+    EnviarMensaje(V, jefe) {aviso que terminé}
+    Informar(papeles)
+  fin 
+
+
+{PROGRAMA PRINCIPAL}
+variables
+  r1: florista
+  r2: papelero
+  jefe: arbitro
+
+comenzar
+  AsignarArea(r1, ciudad)
+  AsignarArea(r2, ciudad)
+  AsignarArea(jefe, ciudad)
+  Iniciar(r1, 1, 1)
+  Iniciar(r2, 31, 1)
+  Iniciar(jefe, 15, 1)
+fin
