@@ -1,0 +1,76 @@
+{
+  Dos robots compiten para ver cuál junta más flores. 
+  El primer robot recoge todas las flores de la avenida 1 
+  entre las calles 1 y 10. 
+  El segundo robot recoge todas las flores de la avenida 2, 
+  entre las calles 11 y 20.
+  Al finalizar el recorrido, el robot que recogió mayor cantidad 
+  de flores debe informar la diferencia de flores que obtuvo respecto 
+  al robot perdedor (el que obtuvo menos flores).
+  Los robots inician en las esquinas (1, 1) y (2, 11) respectivamente.
+}
+
+programa ej1
+
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin 
+
+  proceso recorrer10Esquinas(ES flores: numero)
+  comenzar 
+    repetir 9
+      si (HayFlorEnLaEsquina)
+        juntarFlores(flores)
+      mover 
+    si (HayFlorEnLaEsquina)
+      juntarFlores(flores)
+  fin
+
+areas
+  area1: AreaP(1, 1, 1, 10)
+  area2: AreaP(2, 11, 2, 20)
+
+
+robots 
+  robot florista1
+  variables
+    flores: numero
+    otrasFlores: numero
+  comenzar
+    flores:= 0
+    recorrer10Esquinas(flores)
+    EnviarMensaje(flores, robot2)
+    RecibirMensaje(otrasFlores, robot2)
+    si (flores > otrasFlores)
+      Informar(flores - otrasFlores)
+  fin
+
+  robot florista2
+  variables
+    flores: numero
+    otrasFlores: numero
+  comenzar
+    flores:= 0
+    recorrer10Esquinas(flores)
+    EnviarMensaje(flores, robot1)
+    RecibirMensaje(otrasFlores, robot1)
+    si (flores > otrasFlores)
+      Informar(flores - otrasFlores)
+  fin
+
+
+{PROGRAMA PRINCIPAL}
+variables
+  robot1: florista1 
+  robot2: florista2
+
+comenzar
+  AsignarArea(robot1, area1)
+  AsignarArea(robot2, area2)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 2, 11)  
+fin

@@ -1,0 +1,123 @@
+{
+Realice un programa en el que 3 robots realizan una escalera 
+de 4 escalones cada uno. Todos los escalones tienen un ancho 
+fijo de 1, y un alto aleatorio entre 1 y 5. 
+Al finalizar el recorrido, cada robot deberá enviar al robot jefe 
+la cantidad de escalones que tenían más flores que papeles. 
+Una vez que los tres robots finalizaron, el robot jefe deberá 
+informar la suma de las cantidades enviadas por los 3 robots.
+
+El robot jefe inicia en la esquina (1,1)
+El robot 1 inicia en la esquina (2,1)
+El robot 2 inicia en la esquina (7,1)
+El robot 3 inicia en la esquina (12,1)
+}
+
+programa ejercicio2
+
+procesos 
+  proceso girarIzquierda
+  comenzar
+    repetir 3
+      derecha
+  fin 
+
+  proceso juntarFlores (ES flores: numero)
+  variables
+    aux: numero
+  comenzar 
+    aux:= 0
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      aux:= aux + 1
+    flores:= flores + aux 
+    repetir aux
+      depositarFlor
+  fin
+
+  proceso juntarPapeles (ES papeles: numero)
+  variables
+    aux: numero
+  comenzar
+    aux:= 0
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      aux:= aux + 1
+    papeles:= papeles + aux
+    repetir aux 
+      depositarPapel
+  fin
+
+  proceso evaluarEsquina (ES flores: numero; ES papeles: numero)
+  comenzar 
+    si (HayFlorEnLaEsquina)
+      juntarFlores(flores)
+    si (HayPapelEnLaEsquina)
+      juntarPapeles(papeles)
+  fin
+
+  proceso evaluarEscalon (E alto: numero; ES cantidad: numero)
+  variables
+    papeles: numero 
+    flores: numero
+  comenzar 
+    papeles:= 0
+    flores:= 0
+    repetir alto 
+      evaluarEsquina(flores, papeles)
+      mover
+    derecha
+    evaluarEsquina(flores, papeles)
+    mover
+    evaluarEsquina(flores, papeles)
+    si (flores > papeles)
+      cantidad:= cantidad + 1
+  fin 
+
+areas 
+  ciudad: AreaC(1, 1, 20, 20)
+
+robots 
+  robot jefe
+  variables
+    cantEscalones: numero
+    total: numero
+  comenzar 
+    total:= 0
+    repetir 3
+      RecibirMensaje(cantEscalones, *)
+      total:= total + cantEscalones
+    Informar(cantEscalones)
+  fin
+
+  robot juntador 
+  variables
+    alto: numero
+    cantEscalones: numero
+
+  comenzar
+    cantEscalones:= 0
+    repetir 4
+      Random(alto, 1, 5)
+      evaluarEscalon(alto, cantEscalones)
+      girarIzquierda
+    EnviarMensaje(cantEscalones, elJefe)
+  fin
+
+{PROGRAMA PRINCIPAL}
+variables 
+  elJefe: jefe
+  robot1: juntador 
+  robot2: juntador 
+  robot3: juntador 
+comenzar 
+  AsignarArea(elJefe, ciudad)
+  AsignarArea(robot1, ciudad)
+  AsignarArea(robot2, ciudad)
+  AsignarArea(robot3, ciudad)
+  Iniciar(elJefe, 1, 1)
+  Iniciar(robot1, 2, 1)
+  Iniciar(robot2, 7, 1)
+  Iniciar(robot3, 12, 1)
+fin
+

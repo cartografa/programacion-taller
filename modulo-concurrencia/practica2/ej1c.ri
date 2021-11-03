@@ -1,0 +1,109 @@
+{
+  Dos robots compiten para ver cuál junta más flores. 
+  El primer robot recoge todas las flores de la avenida 1 
+  entre las calles 1 y 10. 
+  El segundo robot recoge todas las flores de la avenida 2, 
+  entre las calles 11 y 20.
+  Al finalizar el recorrido, el robot que recogió mayor cantidad 
+  de flores debe informar la diferencia de flores que obtuvo respecto 
+  al robot perdedor (el que obtuvo menos flores).
+  Los robots inician en las esquinas (1, 1) y (2, 11) respectivamente.
+  
+  Modifique el ejercicio anterior para que ahora participen 6 robots
+    Robot 1: Avenida 1, entre las calles 1 y 10
+    Robot 2: Avenida 2, entre las calles 11 y 20
+    Robot 3: Avenida 3, entre las calles 21 y 30
+    Robot 4: Avenida 4, entre las calles 31 y 40
+    Robot 5: Avenida 5, entre las calles 41 y 50
+    Robot 6: Avenida 6, entre las calles 51 y 60
+    Fiscalizador: Avenida 2, calle 1
+
+  El fiscalizador deberá informar la cantidad de flores que juntó 
+  el robot ganador.
+
+}
+
+programa ej1c
+
+procesos
+  proceso juntarFlores(ES flores: numero)
+  comenzar
+    mientras(HayFlorEnLaEsquina)
+      tomarFlor
+      flores:= flores + 1
+  fin 
+
+  proceso recorrer10Esquinas(ES flores: numero)
+  comenzar 
+    repetir 9
+      si (HayFlorEnLaEsquina)
+        juntarFlores(flores)
+      mover 
+    si (HayFlorEnLaEsquina)
+      juntarFlores(flores)
+  fin
+
+  proceso maximo(E flores: numero; ES max: numero)
+  comenzar  
+    si (flores > max)
+      max:= flores 
+  fin 
+
+areas
+  area1: AreaP(1, 1, 1, 10)
+  area2: AreaP(2, 11, 2, 20)
+  area3: AreaP(3, 21, 3, 30)
+  area4: AreaP(4, 31, 4, 40)
+  area5: AreaP(5, 41, 5, 50)
+  area6: AreaP(6, 51, 6, 60)
+  areaJF: AreaP(2, 1, 2, 1)
+
+
+robots 
+  robot florista
+  variables
+    flores: numero
+  comenzar
+    flores:= 0
+    recorrer10Esquinas(flores)
+    EnviarMensaje(flores, fiscal)
+  fin
+
+  robot fiscalizador
+  variables
+    flores: numero
+    max: numero
+  comenzar
+    max:= -1
+    repetir 6
+      RecibirMensaje(flores, *)
+      maximo(flores, max)
+    Informar(max)
+  fin 
+
+{PROGRAMA PRINCIPAL}
+variables
+  robot1: florista
+  robot2: florista
+  robot3: florista
+  robot4: florista
+  robot5: florista
+  robot6: florista
+  fiscal: fiscalizador
+
+comenzar
+  AsignarArea(robot1, area1)
+  AsignarArea(robot2, area2)
+  AsignarArea(robot3, area3)
+  AsignarArea(robot4, area4)
+  AsignarArea(robot5, area5)
+  AsignarArea(robot6, area6)
+  AsignarArea(fiscal, areaJF)
+  Iniciar(fiscal, 2, 1)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 2, 11)  
+  Iniciar(robot3, 3, 21)  
+  Iniciar(robot4, 4, 31)  
+  Iniciar(robot5, 5, 41)  
+  Iniciar(robot6, 6, 51)  
+fin
