@@ -14,9 +14,10 @@ película.
 
 
 program ej11;
+const
+     dimF = 8;
 
 type
-    g = 1..8;
     pelicula = record
              cod: integer;
              genero: g;
@@ -29,8 +30,7 @@ type
          sig: lista;
          end;
 
-    peliGeneros = array [g] of lista;
-    inicios = array [g] of lista;
+    peliGeneros = array [1..dimF] of lista;
 
 {**********************************************}
 
@@ -92,10 +92,46 @@ end;
 
 {************* MERGE DE LISTAS ****************}
 
-procedure agregarAtras
+procedure agregarAtras (var l, ult: lista; peli: pelicula);
+var
+   nue: lista;
+begin
+     new(nue);
+     nue^.dato:= peli;
+     nue^.sig:= nil;
+     if (l = nil) then l:= nue;
+                  else ult^.sig:= nue;
+     ult:= nue; // actualizo puntero al último
+end;
 
+procedure minimo (var v: peliGeneros; var min: pelicula);
+var
+   i, posMin: integer;
+begin
+     min.cod:= 99999999;
+     for i:= 1 to dimF do begin
+         if (v[i] <> nil) then
+            if (e[i]^.dato.cod < min.cod) then begin
+               min:= v[i]^.dato;
+               posMin:= i;
+            end;
+     end;
+     if (min.cod <> 99999999) then
+        v[posMin]:= v[posMin]^.sig; //adelanto el puntero del mínimo
+end;
 
-procedure minimo (todos,
+procedure merge (var nueL: lista; v: peliGeneros);
+var
+   min: pelicula;
+   ult: lista;
+begin
+     nueL:= nil;
+     minimo(v, min);
+     while (min.cod <> '99999999') do begin
+           agregarAtras(nueL, ult, min);
+           minimo(v, min);
+     end;
+end;
 
 
 
@@ -103,9 +139,10 @@ procedure minimo (todos,
 
 var
    vector: peliGeneros;
+   nuevaLista: lista;
 
 begin
      inicializarListas (vector);
      cargarVector (vector);
-
+     merge (nuevaLista, vector);
 end.

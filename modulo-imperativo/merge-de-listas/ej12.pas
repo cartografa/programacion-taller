@@ -13,6 +13,147 @@ producto.
 
 
 program ej12;
-begin
+const
+     dimF = 4;
+type
+    venta = record
+          dia: 1..31;
+          mes: 1..12;
+          anio: 2000..3000;
+          prod: integer;
+          sucursal: 1..4;
+          cant: integer;
+          end;
 
+     ventaPorProd = record
+                  prod: integer;
+                  cant: integer;
+                  end;
+
+     lista = ^nodo;
+     nodo = record
+          dato: venta;
+          sig: lista;
+          end;
+
+     listaTotal = ^nodoTotal;
+     nodoTotal = record
+               dato: ventaPorProd;
+               sig: listaTotal;
+               end;
+
+     sucursales = array [1..dimF] of lista
+
+{******************************************************************}
+
+{CARGAR DATOS}
+procedure inicializarListas (var v: sucursales);
+var
+   i: integer;
+begin
+     for i:= 1 to dimF do v[i]:= nil;
+end;
+
+procedure leerVenta (var v: venta);
+begin
+     writeln ('Ingrese codigo de sucursal: ');
+     readln (v.cod);
+     if (v.cod <> 0) then begin
+        {..............}
+     end;
+end;
+
+procedure insertarOrdenado (var l: lista; v: venta);
+var
+	nue, ant, act: lista;
+begin
+	new (nue);
+    nue^.dato:= v;
+	act:= l;
+	ant:= l;  {ubico los dos al principio de la lista}
+
+	while (act <> nil) and (act^.dato.prod < v.prod) do begin
+		ant:= act;
+		act:= act^.sig;
+	end;
+
+	if (ant = act) then l:= nue; {dato al principio / o lista vacía}
+	               else ant^.sig:= nue; {dato va entre otros dos o al final}
+    nue^.sig:= act;
+end;
+
+// Cargo vector de listas
+procedure cargarVector (var v: sucursales);
+var
+   dato: venta;
+begin
+     leerVenta (dato);
+     while (dato.cod <> 0) do begin
+           insertarOrdenado (v[dato.cod], dato);
+           leerVenta (dato);
+     end;
+end;
+
+
+{******************************************************************}
+
+
+{MERGE ACUMULADOR}
+procedure mergeAcumulador (var nueL: listaTotal; v: sucursales);
+
+  {AGREGAR ATRAS}
+  procedure agregarAtras (var l, ult: lista; dato: venta);
+  var
+     nue: lista;
+  begin
+    new(nue);
+    nue^.dato:= dato;
+    nue^.sig:= nil;
+    if (l = nil) then l:= nue
+                 else ult^.sig:= nue;
+    ult:= nue;
+  end; 
+    
+  {MINIMO}
+  procedure minimo (var v: sucursales; var min: venta);
+  var
+     i, posMin: integer;
+  begin
+    min.prod:= 999999;
+    for i:= 1 to dimF do
+    begin
+      if (v[i] <> nil) then
+         if (v[i]^.dato.prod < min.prod) then begin
+            min:= v[i]^.dato;
+            posMin:= i; {guardo la posicion de donde saqué el mínimo}
+         end;
+    end;
+    if (min.prod <> 999999) then v[posMin]:= v[posMin]^.sig {avanzo el puntero}
+  end;
+  
+
+{PROGRAMA DEL MERGE ACUMULADOR}
+var
+   min: venta;
+   ult: lista;
+begin
+  nueL:= nil;
+  minimo (v, min);
+  while (min.prod <> 999999) do begin
+     agregarAtras (nueL, ult, min);
+     minimo (v,min);
+    end;
+End;  
+
+
+{******************************************************************}
+
+{PROGRAMA PRINCIPAL}
+var
+   suc: sucursales;
+   ventas: listaTotal;
+begin
+     inicializarListas(suc);
+     cargarVector(suc);
+     mergeAcumulador(ventas, suc);
 end.
