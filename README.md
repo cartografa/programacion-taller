@@ -12,8 +12,9 @@ Está separado en tres módulos:
 	- Matrices
 	- Desarrollo de clases
 	- Herencia
-3. **Módulo Concurrente**
-	- [en construcción]
-
+3. **Módulo Concurrente (entorno R-Info)**
+	- Introducción a la concurrencia
+	- Envío de mensajes
+	- Memoria compartida
 
 ✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨
