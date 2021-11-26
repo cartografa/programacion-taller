@@ -143,3 +143,25 @@ begin
            leerPeli (p);
      end;
 end;
+
+
+{acumulador}
+{MERGE ACUMULADOR}
+procedure mergeAcumulador (var nueL: listaTotal; v: sucursales);
+var
+   min: venta;
+   act: ventaPorProd;
+   ult: lista;
+begin
+  nueL:= nil;
+  minimo (v, min);
+  while (min.prod <> 999999) do begin
+        act.prod:= min.prod;          {guardo el actual}
+        act.cant:= 0;                {contador en 0}
+        while ((min.prod <> 999999) and (min.prod = act.prod) do begin {mientras sean el mismo prod}
+              act.cant:= act.cant + min.cant; {sumo cant}
+              minimo(v, min);
+        end;
+        agregarAtras(nueL, ult, act);
+  end;
+end;

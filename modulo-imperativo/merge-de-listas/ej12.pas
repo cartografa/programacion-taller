@@ -77,7 +77,7 @@ begin
 		act:= act^.sig;
 	end;
 
-	if (ant = act) then l:= nue; {dato al principio / o lista vacía}
+	if (ant = act) then l:= nue {dato al principio / o lista vacía}
 	               else ant^.sig:= nue; {dato va entre otros dos o al final}
     nue^.sig:= act;
 end;
@@ -97,28 +97,24 @@ end;
 
 {******************************************************************}
 
-
-{MERGE ACUMULADOR}
-procedure mergeAcumulador (var nueL: listaTotal; v: sucursales);
-
-  {AGREGAR ATRAS}
-  procedure agregarAtras (var l, ult: lista; dato: venta);
-  var
-     nue: lista;
-  begin
+{AGREGAR ATRAS}
+procedure agregarAtras (var l, ult: lista; dato: venta);
+var
+   nue: lista;
+begin
     new(nue);
     nue^.dato:= dato;
     nue^.sig:= nil;
     if (l = nil) then l:= nue
                  else ult^.sig:= nue;
     ult:= nue;
-  end; 
+end;
     
-  {MINIMO}
-  procedure minimo (var v: sucursales; var min: venta);
-  var
+{MINIMO}
+procedure minimo (var v: sucursales; var min: venta);
+var
      i, posMin: integer;
-  begin
+begin
     min.prod:= 999999;
     for i:= 1 to dimF do
     begin
@@ -129,21 +125,28 @@ procedure mergeAcumulador (var nueL: listaTotal; v: sucursales);
          end;
     end;
     if (min.prod <> 999999) then v[posMin]:= v[posMin]^.sig {avanzo el puntero}
-  end;
-  
+end;
 
-{PROGRAMA DEL MERGE ACUMULADOR}
+
+{MERGE ACUMULADOR}
+procedure mergeAcumulador (var nueL: listaTotal; v: sucursales);
 var
    min: venta;
+   act: ventaPorProd;
    ult: lista;
 begin
   nueL:= nil;
   minimo (v, min);
   while (min.prod <> 999999) do begin
-     agregarAtras (nueL, ult, min);
-     minimo (v,min);
-    end;
-End;  
+        act.prod:= min.prod;          {guardo el actual}
+        act.cant:= 0;                {contador en 0}
+        while ((min.prod <> 999999) and (min.prod = act.prod)) do begin {mientras sean el mismo prod}
+              act.cant:= act.cant + min.cant; {sumo cant}
+              minimo(v, min);
+        end;
+        agregarAtras(nueL, ult, act);
+  end;
+end;
 
 
 {******************************************************************}
