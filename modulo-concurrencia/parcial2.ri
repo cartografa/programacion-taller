@@ -1,0 +1,151 @@
+{
+  Tres robots recolectores deben recorrer su avenida asignada juntando
+  flores y papeles. En una primera etapa los robots recorren su avenida
+  juntando únicamente las flores. Cuando los tres robots finalizan esta
+  etapa, un robot coordinador determinará cuáles son los dos robots que
+  recolectaron más flores y que deberán realizar la segunda etapa. Estos
+  dos robots deberán recorrer su avenida por segunda vez recolectando
+  todos los papeles. Al finalizar, el robot coordinador informará cuál de
+  los robots juntó más objetos en total (flores y papeles).
+  Robot recolector 1 debe recorrer la avenida 5 desde 1 hasta 10. Empezando
+  en la esquina (5, 1)
+  Robot recolector 2 debe recorrer la avenida 6 desde 1 hasta 10. Empezando
+  en la esquina (6, 1)
+  Robot recolector 3 debe recorrer la avenida 7 desde 1 hasta 10. Empezando
+  en la esquina (7, 1)
+  El coordinador estará en la esquina (1, 1)
+}
+
+programa parcial2
+
+procesos
+  proceso juntarFlores(ES f: numero)
+  comenzar
+    mientras (HayFlorEnLaEsquina)
+      tomarFlor
+      f:= f+ 1
+  fin 
+
+  proceso juntarPapeles(ES p: numero)
+  comenzar
+    mientras (HayPapelEnLaEsquina)
+      tomarPapel
+      f:= f+ 1
+  fin 
+
+  proceso recorrerAvenida(E etapa: numero, ES: f: numero, ES p: numero)
+  comenzar
+    si (etapa = 1)
+      repetir 10
+        juntarFlores(f)
+        mover
+      juntarFlores(f)
+    sino
+      repetir 10
+        juntarPapeles(p)
+        mover
+      juntarPapeles(p)
+  fin 
+
+  proceso calcularMaxFlores(ES maxFlores1, maxId1, maxFlores2, maxId2: numero; E f, id: numero)
+  comenzar
+    si (f > maxFlores)
+      maxFlores2:= maxFlores1
+      maxId2:= maxId1
+      maxFlores1:= f 
+      maxId1:= id
+    sino
+      si (f > maxFlores2)
+        maxFlores2:= f
+        maxId2:= id
+  fin 
+
+areas
+  r1: AreaP(5, 1, 5, 10)
+  r2: AreaP(6, 1, 6, 10)
+  r3: AreaP(7, 1, 7, 10)
+  r4: AreaP(1, 1, 1, 1)
+
+robots
+  robot coordinador
+  variables
+    total, maxTotal, f, id, ganador: numero
+    maxId1, maxId2, maxFlores1, maxFlores2: numero 
+  comenzar
+    EnviarMensaje(1, robot1)
+    EnviarMensaje(2, robot2)
+    EnviarMensaje(3, robot3)
+
+    maxFlores:= -1
+    repetir 3
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(f, robot1)
+        calcularMaxFlores(maxFlores1, maxId1, maxFlores2, maxId2, f, id)
+      sino 
+        si (id = 2)
+          RecibirMensaje(f, robot2)
+          calcularMaxFlores(maxFlores1, maxId1, maxFlores2, maxId2, f, id)
+        sino 
+          RecibirMensaje(f, robot3)
+          calcularMaxFlores(maxFlores1, maxId1, maxFlores2, maxId2, f, id)
+    
+    si (maxId1 = 1 | maxId2 = 1)
+      EnviarMensaje(V, robot1)
+    si (maxId1 = 2 | maxId2 = 2)
+      EnviarMensaje(V, robot2)
+    si (maxId1 = 3 | maxId2 = 3)
+      EnviarMensaje(V, robot3)
+
+    repetir 2
+      RecibirMensaje(id, *)
+      si (id = 1)
+        RecibirMensaje(total, robot1)
+        si (total > maxTotal)
+          maxTotal:= total 
+          ganador:= id
+      sino 
+        RecibirMensaje(total, robot2)  
+        si (total > maxTotal)
+          maxTotal:= total 
+          ganador:= id
+
+    Informar(ganador)
+  fin 
+
+  robot recolector 
+  variables
+    av, ca, flores, papeles, id, total: numero
+    ok: boolean
+  comenzar
+    av:= PosAv
+    ca:= PosCa
+    recorrerAvenida(1, flores, papeles)
+    EnviarMensaje(id, robot4)
+    EnviarMensaje(flores, robot4)
+    RecibirMensaje(ok, robot4)
+    si (ok)
+      recorrerAvenida(2, flores, papeles)
+      EnviarMensaje(id, robot4)
+      EnviarMensaje(papeles, robot4)
+    EnviarMensaje(id, robot4)
+    total:= flores + papeles
+    EnviarMensaje(total, robot4)
+  fin
+
+
+
+{PROGRAMA PRINCIPAL}
+variables
+  robot1, robot2, robot3: recolector
+  robot4: coordinador
+comenzar
+  AsignarArea(r1, robot1)
+  AsignarArea(r2, robot2)
+  AsignarArea(r3, robot3)
+  AsignarArea(r4, robot4)
+  Iniciar(r1, 5, 1)
+  Iniciar(r2, 6, 1)
+  Iniciar(r3, 7, 1)
+  Iniciar(r4, 1, 1)
+fin 

@@ -1,0 +1,177 @@
+{
+  Dos robots trabajadores deben recorrer el perímetro de un rectángulo
+  asignado. Durante el recorrido deben ir depositando unas cantidad de
+  flores y una cantidad de papel en cada esquina.
+  La cantidad de flores y la de papeles debe ser elegida al azar y debe
+  ser distinta para cada esquina y para cada objeto, eligiendo un valor
+  entre 1 y 3. Las flores se encuentran en la esquina (21, 21) y los
+  papeles en (22, 22). Las flores y los papeles deben ser recolectados de
+  a uno. Al finalizar el recorrido los robots deben informar al coordinador
+  la cantiadad de objetos depositados. Suponga que en las fuentes de flores
+  y papeles hay objetos suficientes para ambos robots.
+  Un robot coordinador determina al azar el alto y el ancho del rectángulo
+  que debe realizar cada uno de los robot recolectores dentro del área
+  de trabajo correspondiente. El coordinador debe determinar e informar qué
+  tipo de objetos fue el que más se depositó entre los dos trabajores, si
+  flores o papeles.
+  El área de trabajo del robot 1 es (1, 1, 20, 20), el área de trabajo del
+  robot 2 es (21, 1, 40, 20). El coordinador inicia en (23, 23); robot 1 en
+  (1, 1); robot 2 en (2, 1).
+}
+
+programa parcial1
+procesos 
+  proceso izquierda 
+  comenzar 
+    repetir 3
+      derecha
+  fin
+
+  proceso calcularRect(ES ancho: numero, ES alto: numero)
+  comenzar
+    Random(ancho, 1, 20)
+    Random(alto, 1, 20)
+  fin 
+
+  proceso buscarFlores(E nro: numero)
+  variables
+    av, ca: numero
+  comenzar 
+    av:= PosAv
+    ca:= PosCa  
+    repetir nro
+      BloquearEsquina(21, 21)
+      Pos(21, 21)
+      tomarFlor
+      Pos(av, ca)
+      LiberarEsquina
+  fin
+
+  proceso buscarPapeles(E nro: numero)
+  variables
+    av, ca: numero
+  comenzar 
+    av:= PosAv
+    ca:= PosCa  
+    repetir nro
+      BloquearEsquina(22, 22)
+      Pos(22, 22)
+      tomarPapel
+      Pos(av, ca)
+      LiberarEsquina(22, 22)
+  fin
+
+  proceso calcularCant(ES f: numero, ES p: numero)
+  comenzar
+    Random(f, 1, 3)
+    Random(p, 1, 3)
+  fin 
+
+  proceso depositarFlores(E nro: numero)
+  comenzar
+    repetir nro
+      depositarFlor
+  fin 
+
+  proceso depositarPapeles(E nro: numero)
+  comenzar
+    repetir nro
+      depositarPapel
+  fin 
+
+  proceso recorrerLado(E largo: numero, ES totalF: numero, ES totalP: numero)
+  variables
+    f, p: numero
+  comenzar 
+    repetir largo
+      calcularCant(f, p)
+      totalF:= totalF + f
+      totalP:= totalP + p
+      buscarFlores(nro)
+      buscarPapeles(nro)
+      dejarFlores(f)
+      dejarPapeles(p)
+      mover 
+  fin
+
+
+areas
+  r1: AreaP(1, 1, 20, 20)
+  r2: AreaP(21, 1, 40, 20)
+  coord: AreaP(23, 23, 23, 23)
+  f: AreaPC(21, 21, 21, 21)
+  p: AreaPC(22, 22, 22, 22)
+
+robots
+  robot coordinador
+  variables
+    id, totalF, totalP, ancho, alto, f, p: numero
+  comenzar
+    EnviarMensaje(1, robot1)
+    EnviarMensaje(2, robot2)
+
+    calcularRect(ancho, alto)
+    EnviarMensaje(ancho, robot1)
+    EnviarMensaje(alto, robot1)
+
+    calcularRect(ancho, alto)
+    EnviarMensaje(ancho, robot2)
+    EnviarMensaje(alto, robot2)
+
+    RecibirMensaje(id, *)
+
+    repetir 2
+      si (id = 1)
+        RecibirMensaje(p, robot1)
+        RecibirMensaje(f, robot1)
+        totalP:= totalP + p 
+        totalF:= totalF + f
+      sino 
+        RecibirMensaje(p, robot2)
+        RecibirMensaje(f, robot2)
+        totalP:= totalP + p 
+        totalF:= totalF + f
+    
+    si (totalF > totalP)
+      Informar(totalF)
+    sino
+      Informar(totalP)
+  fin 
+
+  robot jugador
+  variables
+    ancho, alto, id, misP, misF: numero 
+  comenzar
+    RecibirMensaje(id, jefe)
+    RecibirMensaje(ancho, jefe)
+    RecibirMensaje(alto, jefe)
+    misP:= 0
+    misF:= 0 
+    repetir 2
+      recorrerLado(alto)
+      derecha
+      recorrerLado(ancho)
+      derecha
+    EnviarMensaje(id, jefe)
+    EnviarMensaje(misP, jefe)
+    EnviarMensaje(misF, jefe)
+  fin 
+
+
+{PROGRAMA PRINCIPAL}
+variables
+  robot1, robot2: jugador
+  jefe: coordinador
+comenzar 
+  AsignarArea(jefe, coord)
+  AsignarArea(robot1, r1)
+  AsignarArea(robot2, r2)
+  AsignarArea(robot1, f)
+  AsignarArea(robot1, p)
+  AsignarArea(robot2, f)
+  AsignarArea(robot2, p)
+  Iniciar(jefe, 23, 23)
+  Iniciar(robot1, 1, 1)
+  Iniciar(robot2, 2, 1)
+fin
+
